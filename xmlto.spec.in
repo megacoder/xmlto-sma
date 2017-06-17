@@ -1,0 +1,82 @@
+Summary: A tool for converting XML files to various formats.
+Name: xmlto
+Version: @VERSION@
+Release: 0.1-fop
+License: GPL
+Group: Applications/System
+URL: http://cyberelk.net/tim/xmlto/
+Source0: ftp://cyberelk.net/tim/data/xmlto/stable/%{name}-%{version}.tar.bz2
+BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
+
+BuildRequires: docbook-xsl >= 1.56.0
+BuildRequires: libxslt
+BuildRequires: docbook-dtds
+
+# We rely entirely on the DocBook XSL stylesheets!
+Requires: docbook-xsl >= 1.56.0
+
+# For full functionality, we need passivetex.
+Requires: passivetex >= 1.11
+Requires: libxslt
+Requires: docbook-dtds
+Requires: fop
+
+%description
+This is a package for converting XML files to various formats using XSL
+stylesheets.
+
+%prep
+%setup -q
+
+%build
+%GNUconfigure
+make
+make check
+
+%install
+rm -rf %{buildroot}
+%makeinstall
+
+[ -d %{buildroot}%{_datadir}/xmlto/xsl ] || \
+  mkdir %{buildroot}%{_datadir}/xmlto/xsl
+
+%clean
+rm -rf %{buildroot}
+
+%files
+%defattr(-,root,root)
+%{_bindir}/*
+%{_mandir}/*/*
+%{_datadir}/xmlto
+
+%changelog
+* Fri Fed 11 2005 Tommy Reynolds <Tommy.Reynolds@MegaCoder.com>
+- Use FOP to generate PDF and PS output.
+
+* Fri May 23 2003 Tim Waugh <twaugh@redhat.com>
+- Be sure to create the xsl directory.
+- README.docbook-xsl is no longer shipped.
+
+* Wed Oct  9 2002 Tim Waugh <twaugh@redhat.com>
+- Build requires docbook-xsl >= 1.56.0.
+
+* Sun Oct  6 2002 Tim Waugh <twaugh@redhat.com>
+- Remove 'BuildArch: noarch' now that we ship a compiled object.
+- Run tests.
+- Ship xmlif.
+- Build requires docbook-xsl >= 1.52.0.
+
+* Fri Aug 30 2002 Tim Waugh <twaugh@redhat.com>
+- Bump docbook-xsl requirement to 1.52.0 for manpages.
+
+* Fri Aug  2 2002 Tim Waugh <twaugh@redhat.com>
+- The archive is now distributed in .tar.bz2 format.
+
+* Fri Jan 25 2002 Tim Waugh <twaugh@redhat.com>
+- Require the DocBook DTDs.
+
+* Fri Jan 18 2002 Tim Waugh <twaugh@redhat.com>
+- Ship README.docbook-xsl.
+
+* Fri Nov 23 2001 Tim Waugh <twaugh@redhat.com>
+- Initial spec file.
